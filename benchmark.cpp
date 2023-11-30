@@ -3,62 +3,19 @@
 #include <string>
 #include <chrono>
 #include <fstream>
+#include <iomanip>
 
-// Fills lps[] for given patttern pat[]
-void computeLPSArray(const std::string& pat, int M, std::vector<int>& lps) {
-    int length = 0;
-    lps[0] = 0;
 
-    int i = 1;
-    while (i < M) {
-        if (pat[i] == pat[length]) {
-            length++;
-            lps[i] = length;
-            i++;
-        } else {
-            if (length != 0) {
-                length = lps[length - 1];
-            } else {
-                lps[i] = 0;
-                i++;
-            }
-        }
-    }
-}
-
-// KMP search algorithm
-void KMPSearch(const std::string& pat, const std::string& txt) {
-    int M = pat.length();
-    int N = txt.length();
-
-    std::vector<int> lps(M);
-
-    computeLPSArray(pat, M, lps);
-
-    int i = 0; // index for txt[]
-    int j = 0; // index for pat[]
-    while (i < N) {
-        if (pat[j] == txt[i]) {
-            j++;
-            i++;
-        }
-
-        if (j == M) {
-            std::cout << "Found pattern at index " << i - j << std::endl;
-            j = lps[j - 1];
-        } else if (i < N && pat[j] != txt[i]) {
-            if (j != 0) {
-                j = lps[j - 1];
-            } else {
-                i++;
-            }
-        }
-    }
-}
+extern void KMPSearch(const std::string& pat, const std::string& txt);
+extern const char* kmp_desc;
 
 
 std::string readFile(const std::string& fileName) {
     std::ifstream file(fileName);
+    if (!file) {
+        std::cerr << "Unable to open file: " << fileName << std::endl;
+        return "";
+    }
     std::string str;
     std::string content;
     while (std::getline(file, str)) {
@@ -68,22 +25,47 @@ std::string readFile(const std::string& fileName) {
     return content;
 }
 
+
 void measureTime(const std::string& pattern, const std::string& text) {
-    std::chrono::time_point<std::chrono::high_resolution_clock> start_time = std::chrono::high_resolution_clock::now();
 
-    KMPSearch(pattern, text);
-
-    std::chrono::time_point<std::chrono::high_resolution_clock> end_time = std::chrono::high_resolution_clock::now();
-    std::chrono::duration<double> elapsed = end_time - start_time;
-    std::cout << " Elapsed time is : " << elapsed.count() << " " << std::endl;
 }
 
 
 int main() {
-    std::string pattern = "Modern";
-    std::string text1 = readFile("dataset/1mb.txt");
+    std::cout << "Description:\t" << kmp_desc << std::endl << std::endl;
 
-    measureTime(pattern, text1);
+    std::cout << std::fixed << std::setprecision(5);
+    std::string pattern = "Modern";
+    std::vector<std::string> myVector;
+    int problemSize[4] = {1, 5, 10, 20};
+    int n = sizeof(problemSize) / sizeof(problemSize[0]);
+    for (int i = 0; i < n; ++i) {
+        std::string filename = "../dataset/" + std::to_string(problemSize[i]) + "mb.txt";
+        // You can now use 'filename' as needed
+        std::string text = readFile(filename);
+        myVector.push_back(text);
+    }
+    
+    for (int i = 0; i < n; ++i) {
+        
+        std::chrono::time_point<std::chrono::high_resolution_clock> start_time = std::chrono::high_resolution_clock::now();
+        std::cout << std::endl << "Working with "<< problemSize[i]<<" Mb Dataset" << std::endl << std::endl;
+        KMPSearch(pattern, myVector[i]);
+
+        std::chrono::time_point<std::chrono::high_resolution_clock> end_time = std::chrono::high_resolution_clock::now();
+        std::chrono::duration<double> elapsed = end_time - start_time;
+        std::cout << std::endl << " Elapsed time is : " << elapsed.count() << " " << std::endl;
+        auto elapsed_mi = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
+        std::cout << "Elapsed time in milliseconds: " << elapsed_mi.count() << " ms" << std::endl;
+        auto elapsed_mc = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time);
+        std::cout << "Elapsed time in microseconds: " << elapsed_mc.count() << " µs" << std::endl;
+        auto elapsed_ns = std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time);
+        std::cout << "Elapsed time in nanoseconds: " << elapsed_ns.count() << " ns" << std::endl;
+
+
+
+
+    }
 
     return 0;
 }
