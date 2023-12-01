@@ -4,6 +4,7 @@
 #include <chrono>
 #include <fstream>
 #include <iomanip>
+#include <omp.h>
 
 
 extern void KMPSearch(const std::string& pat, const std::string& txt);
@@ -37,7 +38,7 @@ int main() {
     std::cout << std::fixed << std::setprecision(5);
     std::string pattern = "Modern";
     std::vector<std::string> myVector;
-    int problemSize[4] = {1, 5, 10, 20};
+    int problemSize[5] = {1,5,10,20,700};
     int n = sizeof(problemSize) / sizeof(problemSize[0]);
     for (int i = 0; i < n; ++i) {
         std::string filename = "../dataset/" + std::to_string(problemSize[i]) + "mb.txt";
@@ -45,26 +46,17 @@ int main() {
         std::string text = readFile(filename);
         myVector.push_back(text);
     }
-    
+
     for (int i = 0; i < n; ++i) {
-        
-        std::chrono::time_point<std::chrono::high_resolution_clock> start_time = std::chrono::high_resolution_clock::now();
         std::cout << std::endl << "Working with "<< problemSize[i]<<" Mb Dataset" << std::endl << std::endl;
+        std::chrono::time_point<std::chrono::high_resolution_clock> start_time = std::chrono::high_resolution_clock::now();
         KMPSearch(pattern, myVector[i]);
 
         std::chrono::time_point<std::chrono::high_resolution_clock> end_time = std::chrono::high_resolution_clock::now();
         std::chrono::duration<double> elapsed = end_time - start_time;
-        std::cout << std::endl << " Elapsed time is : " << elapsed.count() << " " << std::endl;
+        std::cout << std::endl << "Elapsed time is : " << elapsed.count() << " " << std::endl;
         auto elapsed_mi = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
         std::cout << "Elapsed time in milliseconds: " << elapsed_mi.count() << " ms" << std::endl;
-        auto elapsed_mc = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time);
-        std::cout << "Elapsed time in microseconds: " << elapsed_mc.count() << " µs" << std::endl;
-        auto elapsed_ns = std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time);
-        std::cout << "Elapsed time in nanoseconds: " << elapsed_ns.count() << " ns" << std::endl;
-
-
-
-
     }
 
     return 0;

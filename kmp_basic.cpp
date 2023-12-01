@@ -6,57 +6,54 @@
 const char* kmp_desc = "Basic implementation of KMP.";
 
 
-// Fills lps[] for given patttern pat[]
-void computeLPSArray(const std::string& pat, int M, std::vector<int>& lps) {
-    int length = 0;
-    lps[0] = 0;
+void computeNewNextArray(const std::string& pat, std::vector<int>& newnext) {
+    int M = pat.size();
+    newnext.resize(M + 1);
+    newnext[0] = newnext[1] = 0; // Assuming newnext[0] is not used as we start from index 1
 
-    int i = 1;
-    while (i < M) {
-        if (pat[i] == pat[length]) {
-            length++;
-            lps[i] = length;
-            i++;
-        } else {
-            if (length != 0) {
-                length = lps[length - 1];
-            } else {
-                lps[i] = 0;
-                i++;
-            }
+    int j = 0;
+    for (int i = 1; i < M; i++) {
+        while (j > 0 && pat[i] != pat[j]) {
+            j = newnext[j];
         }
+        if (pat[i] == pat[j]) {
+            j++;
+        }
+        newnext[i + 1] = j;
     }
 }
 
 void KMPSearch(const std::string& pat, const std::string& txt) {
-    int M = pat.length();
-    int N = txt.length();
-    int count = 0;
+    int M = pat.size();
+    int N = txt.size();
+    std::vector<int> newnext;
+    computeNewNextArray(pat, newnext);
+    //int count = 0;
 
-    std::vector<int> lps(M);
+    int j = 0; 
+    std::vector<int> match(N, 0); // To keep track of matches
 
-    computeLPSArray(pat, M, lps);
-
-    int i = 0; // index for txt[]
-    int j = 0; // index for pat[]
-    while (i < N) {
+    for (int i = 0; i < N; i++) { // Loop through text
+        while (j > 0 && pat[j] != txt[i]) {
+            j = newnext[j];
+        }
         if (pat[j] == txt[i]) {
             j++;
-            i++;
         }
-
-        if (j == M) {
-            //td::cout << "Found pattern at index " << i - j << std::endl;
-            j = lps[j - 1];
-            count += 1;
-        } else if (i < N && pat[j] != txt[i]) {
-            if (j != 0) {
-                j = lps[j - 1];
-            } else {
-                i++;
-            }
+        if (j == M) { // Full match found
+            match[i - M + 1] = 1;
+            //count++;
+            j = newnext[M];
         }
     }
-    std::cout << "Total pattern found: " << count << std::endl;
 
+    // Print the positions of matches
+    /*
+    for (int i = 0; i < N; i++) {
+        if (match[i] == 1) {
+            std::cout << "Pattern found at index " << i << std::endl;
+        }
+    }
+    */
+    //std::cout << "Total matches: " << count << std::endl;
 }
