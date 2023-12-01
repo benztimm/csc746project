@@ -106,6 +106,8 @@ void KMPSearch(const std::string& pat, const std::string& txt) {
                 ++chunkEnd[t];
             }
         }
+        //std::cout << "Thread " << t << " working on " << chunkStart[t] << " to " << chunkEnd[t] << std::endl;
+
     }
     //int count = 0;
     #pragma omp parallel
@@ -114,7 +116,6 @@ void KMPSearch(const std::string& pat, const std::string& txt) {
         int start = chunkStart[threadId];
         int end = chunkEnd[threadId];
         //std::cout << "Thread " << threadId << " working on " << start << " to " << end << std::endl;
-
         int j = 0; // Index for pattern
         for (int i = start; i < end; i++) {
             while (j > 0 && pat[j] != txt[i]) {
@@ -127,6 +128,9 @@ void KMPSearch(const std::string& pat, const std::string& txt) {
                 match[i - M + 1] = 1;
                 //count++;
                 j = newnext[M];
+                //#pragma omp critical
+                //std::cout << "Pattern found at index " << i << " Thread number: " << omp_get_thread_num() << std::endl;
+                
             }
         }
     }

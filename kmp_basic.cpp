@@ -8,7 +8,8 @@ const char* kmp_desc = "Basic implementation of KMP.";
 
 void computeNewNextArray(const std::string& pat, std::vector<int>& newnext) {
     int M = pat.size();
-    newnext[0] = 0; 
+    newnext.resize(M + 1);
+    newnext[0] = newnext[1] = 0; // Assuming newnext[0] is not used as we start from index 1
 
     int j = 0;
     for (int i = 1; i < M; i++) {
