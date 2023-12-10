@@ -16,7 +16,9 @@ After login to NERSC Permulter,
 
     git lfs pull
 
-    Note that each pull used up the bandwidth from my account, I purchased the additional data pack which gave us 50GB bandwidth to use. Still please be mindful when you're cloning the repo
+    Note that each pull used up the bandwidth from my account, 
+    I purchased the additional data pack which gave us 50GB bandwidth to use. 
+    Still please be mindful when you're cloning the repo
 
 
 Go to the clone repository. If the build folder already exists, then run this command
@@ -39,7 +41,7 @@ All code should be executed on a CPU node.
 simply run,
 
     salloc --nodes 1 --qos interactive --time 00:30:00 --constraint cpu --account=m3930
-    
+
 ## For kmpsearch-basic, 
 
 Simply run,
