@@ -1,0 +1,7 @@
+# author: E. Wes Bethel, Oct 2022
+# sample data for use with the plot_3vars.py file,
+Problem Size,serial
+1mb,1
+5mb,6
+10mb,13
+20mb,26

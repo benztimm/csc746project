@@ -1,0 +1,35 @@
+benztimm@nid200011:~/csc746project/build> export OMP_NUM_THREADS=1
+benztimm@nid200011:~/csc746project/build> srun kmpsearch-openmp 
+Description:    Openmp implementation of KMP.
+
+
+Working with 1 Mb Dataset
+
+
+Elapsed time is : 0.00094
+Elapsed time in milliseconds: 0 ms
+
+Working with 5 Mb Dataset
+
+
+Elapsed time is : 0.00714
+Elapsed time in milliseconds: 7 ms
+
+Working with 10 Mb Dataset
+
+
+Elapsed time is : 0.01385
+Elapsed time in milliseconds: 13 ms
+
+Working with 20 Mb Dataset
+
+
+Elapsed time is : 0.02690
+Elapsed time in milliseconds: 26 ms
+
+Working with 700 Mb Dataset
+
+
+Elapsed time is : 0.94478
+Elapsed time in milliseconds: 944 ms
+benztimm@nid200011:~/csc746project/build> 

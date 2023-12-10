@@ -1,0 +1,9 @@
+# author: E. Wes Bethel, Oct 2022,SPEEDUP
+# sample data for use with the plot_3vars.py file,,
+Thread,700mb,
+serial,1,
+p=4,1.74,
+p=8,1.95,
+p=16,2.06,
+p=32,2.14,
+p=64,2.15,
